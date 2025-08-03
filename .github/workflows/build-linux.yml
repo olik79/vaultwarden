@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install Rust
       uses: actions-rs/toolchain@v1
@@ -17,14 +17,16 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Build with SQLite support
+    - name: Install SQLite dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y libsqlite3-dev pkg-config
-        cargo build --release --features sqlite
+
+    - name: Build Vaultwarden with SQLite
+      run: cargo build --release --features sqlite
 
     - name: Upload vaultwarden binary
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: vaultwarden-x86_64
         path: target/release/vaultwarden
